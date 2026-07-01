@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eunjae Shin — CV · Anthropic (Business Development Representative)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFFAF0; --card:#F5F0E0; --strong:#EBE6D6;
+    --gold:#E8B94A; --ochre:#B8902E; --teal:#1A3A3A;
+    --ink:#1A1A1A; --muted:#6A6A6A; --dim:#9A9A9A; --hair:#E5E5E5;
+    --sans:'Inter','Noto Sans KR',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --confirm:#C0392B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#cfc9ba;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+
+  /* A4 page */
+  .page{
+    width:210mm;min-height:297mm;margin:12px auto;background:var(--cream);
+    padding:13mm 14mm 10mm;box-shadow:0 8px 40px rgba(0,0,0,.18);
+    display:grid;grid-template-columns:62mm 1fr;column-gap:9mm;
+  }
+
+  /* ---------- header (spans both cols) ---------- */
+  .head{grid-column:1 / -1;display:flex;justify-content:space-between;align-items:flex-end;
+    border-bottom:2px solid var(--ink);padding-bottom:7px;margin-bottom:9px}
+  .name{font-size:33px;font-weight:700;letter-spacing:-.5px;line-height:1}
+  .name .kr{font-size:15px;font-weight:500;color:var(--muted);margin-left:8px;letter-spacing:0}
+  .role{font-size:12.5px;font-weight:600;color:var(--ochre);margin-top:5px;letter-spacing:.2px}
+  .head .tagline{font-size:10px;color:var(--muted);text-align:right;max-width:74mm;line-height:1.45}
+
+  /* ---------- sidebar ---------- */
+  aside{display:flex;flex-direction:column;gap:11px}
+  .card{background:var(--card);border-radius:12px;padding:11px 12px}
+  .card.gold{background:var(--gold)}
+  h3{font-size:9.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--ochre);margin-bottom:7px}
+  .card.gold h3{color:var(--teal)}
+  .kv{font-size:10.5px;line-height:1.7;color:var(--ink)}
+  .kv a{color:var(--ink);text-decoration:none}
+  .kv .lbl{color:var(--muted)}
+
+  .qr{display:flex;gap:10px;align-items:center}
+  .qr img{width:26mm;height:26mm;border-radius:8px;background:#fff;padding:3px}
+  .qr .cap{font-size:9.5px;line-height:1.5}
+  .qr .cap b{display:block;font-size:10.5px;color:var(--teal)}
+  .qr .cap a{color:var(--ochre);text-decoration:none;word-break:break-all}
+
+  .strengths li{list-style:none;font-size:10.5px;line-height:1.35;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);font-weight:500}
+  .strengths li:last-child{border:0;padding-bottom:0}
+  .strengths li span{display:block;font-weight:400;font-size:9px;color:var(--teal);opacity:.8;margin-top:1px}
+
+  .tags{display:flex;flex-wrap:wrap;gap:5px}
+  .tag{font-size:9px;background:var(--strong);border-radius:20px;padding:3px 9px;font-weight:500}
+
+  .edu b{font-size:10.5px}
+  .edu .sub{font-size:9.5px;color:var(--muted)}
+  .edu .yr{float:right;font-size:9px;color:var(--dim)}
+  .edu p{margin-bottom:6px;line-height:1.45;overflow:hidden}
+
+  /* ---------- main ---------- */
+  main{display:flex;flex-direction:column;gap:10px}
+  .profile{font-size:10.5px;line-height:1.55;color:#3A3A3A}
+  .profile b{color:var(--ochre)}
+  section h2{font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--teal);
+    border-bottom:1.5px solid var(--gold);padding-bottom:3px;margin-bottom:8px}
+
+  .core li{list-style:none;font-size:10.5px;line-height:1.5;margin-bottom:6px;padding-left:14px;position:relative}
+  .core li::before{content:"";position:absolute;left:0;top:6px;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+  .core b{color:var(--ink)}
+
+  .job{margin-bottom:9px}
+  .job .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .job .org{font-size:11.5px;font-weight:700}
+  .job .org .pos{font-weight:500;color:var(--ochre);font-size:10.5px}
+  .job .date{font-size:9px;color:var(--dim);white-space:nowrap;font-weight:500}
+  .job p{font-size:10px;line-height:1.5;color:#333;margin-top:2px}
+  .job .win{color:var(--ochre);font-weight:600}
+
+  /* AI highlight band */
+  .ai{background:var(--teal);border-radius:12px;padding:11px 13px;color:#F3EFE2}
+  .ai h2{color:var(--gold);border-color:rgba(232,185,74,.4)}
+  .ai li{list-style:none;font-size:10px;line-height:1.5;margin-bottom:6px;padding-left:14px;position:relative;color:#EDE7D6}
+  .ai li:last-child{margin-bottom:0}
+  .ai li::before{content:"▸";position:absolute;left:0;top:0;color:var(--gold);font-size:9px}
+  .ai b{color:#fff}
+
+  /* confirm markers — must be replaced before sending */
+  .confirm{background:#FBE9E7;color:var(--confirm);font-weight:700;border-radius:4px;padding:0 4px;font-size:9.5px}
+
+  /* ---------- print ---------- */
+  .print-hint{position:fixed;top:14px;right:14px;background:var(--ink);color:#fff;border:0;
+    font-family:var(--sans);font-size:12px;font-weight:600;padding:9px 15px;border-radius:8px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+  @page{size:A4;margin:0}
+  @media print{
+    html,body{background:#fff}
+    .page{margin:0;box-shadow:none;width:auto;min-height:auto}
+    .print-hint{display:none}
+    .confirm{background:none;color:inherit}
+  }
+</style>
+</head>
+<body>
+<button class="print-hint" onclick="window.print()">⬇ Save as PDF / Print</button>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="head">
+    <div>
+      <div class="name">Eunjae Shin<span class="kr">신은재</span></div>
+      <div class="role">Business Development Representative — Anthropic (Seoul)</div>
+    </div>
+    <div class="tagline">Bilingual go-to-market operator who opens hard-to-reach accounts, runs data-driven outreach, and builds AI tools that scale a team's output.</div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="card">
+      <h3>Contact</h3>
+      <div class="kv">
+        <div><span class="lbl">M</span>&nbsp; +82 10-9551-9216</div>
+        <div><span class="lbl">E</span>&nbsp; eunjae.shin@gmail.com</div>
+        <div><span class="lbl">L</span>&nbsp; Seoul, South Korea</div>
+      </div>
+    </div>
+
+    <div class="card gold">
+      <h3>Portfolio</h3>
+      <div class="qr">
+        <img src="data:image/png;base64,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" alt="Meet Eunjae QR">
+        <div class="cap">
+          <b>Meet&nbsp;Eunjae</b>
+          AI tools · go-to-market · selected work<br>
+          <a href="https://eulala2323.github.io/Meet-Eunjae/">eulala2323.github.io/Meet-Eunjae</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Why BDR / Why Anthropic</h3>
+      <ul class="strengths">
+        <li>Native-level English + Korean<span>Direct comms with global HQ &amp; local market</span></li>
+        <li>Outbound that lands top-tier targets<span>WSJ · CNN · Bloomberg cold-pitched &amp; won</span></li>
+        <li>Turns data into decisions<span>Survey design &amp; analysis at scale</span></li>
+        <li>Ships own AI tools<span>Automates research, drafting &amp; analysis</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Tools &amp; Skills</h3>
+      <div class="tags">
+        <span class="tag">Generative AI</span>
+        <span class="tag">Built internal SaaS tool</span>
+        <span class="tag">Workflow automation</span>
+        <span class="tag">Excel · Data viz</span>
+        <span class="tag">HTML / web</span>
+        <span class="tag">SQL (DB migration)</span>
+        <span class="tag">Outbound &amp; pitching</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Languages</h3>
+      <div class="kv">
+        <div>English <span class="lbl">— Native-level</span></div>
+        <div>Korean <span class="lbl">— Native</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Education</h3>
+      <div class="edu">
+        <p><span class="yr">2019</span><b>Seoul National University</b><br><span class="sub">M.A., Political Science</span></p>
+        <p><span class="yr">2014</span><b>UC Berkeley</b><br><span class="sub">B.A., Peace &amp; Conflict Studies</span></p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+    <p class="profile">
+      Bilingual (native-level English/Korean) communications professional pivoting into <b>business development</b>.
+      For 8+ years my job has been <b>outbound by another name</b> — researching the right targets, crafting the pitch
+      that cuts through, and converting hard-to-reach decision-makers into results. I pair that with a
+      <b>builder's fluency in AI</b>: I ship my own tools to automate the busywork so the team spends its time closing.
+      I want to do exactly that for Anthropic's Seoul pipeline.
+    </p>
+
+    <!-- AI APPEAL BAND -->
+    <section class="ai">
+      <h2>AI in Practice — Tools I've Built</h2>
+      <ul>
+        <li><b>Automated media-intelligence pipeline:</b> AI tool that collects, summarizes, and formats a client's news coverage into a standardized daily report — <b>cutting report time from 2.5→1.5h and 1→0.5h</b>.</li>
+        <li><b>Internal SaaS, adopted team-wide:</b> Login-based tool where colleagues set search terms and route near-real-time news alerts to Teams — ending the manual page-refreshing every PR team lives with. When API limits bottlenecked it, I <b>migrated the backend from Google to SQL</b> myself.</li>
+        <li><b>Receipt-to-report automation:</b> Custom tool that reads receipt images and compiles them into a client out-of-pocket (OOP) expense report — no manual data entry.</li>
+        <li><b>Product empathy:</b> I hand-built my portfolio, this CV, and its QR in HTML. I don't just use AI products — I build with them, so I get how API-first, consumption-based products get adopted: exactly Anthropic's buyer.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>What Maps to BDR</h2>
+      <ul class="core">
+        <li><b>Outbound &amp; qualification:</b> Media relations is prospecting — research target lists, prioritize by fit, personalize outreach, convert. Landed coverage from <b>WSJ, Bloomberg, CNN, Billboard, TIME</b>: outbound to hard targets, exactly what BDR runs on.</li>
+        <li><b>Pipeline &amp; process:</b> Ran high-volume inbound (press &amp; interview requests) with triage, prioritization, and fast handoff — the discipline of managing a lead queue.</li>
+        <li><b>Cross-functional collaboration:</b> Partnered with global HQ and internal teams to align messaging and handoffs — the "work with sales, optimize the handoff" muscle the role needs.</li>
+        <li><b>Data-driven insight:</b> Designed and analyzed large-scale surveys (10,000-person Seoul youth study) end to end — turning data into decisions.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+
+      <div class="job">
+        <div class="top"><div class="org">Edelman Korea <span class="pos">· Corporate Team, Manager</span></div><div class="date">Oct 2023 – Present</div></div>
+        <p>Own outbound media strategy for mobility/tech accounts — build target lists, personalize pitches, and land placements in <span class="win">WSJ · TechRadar · T3 · Tom's Guide</span>. Manage high-stakes inbound (IPO, investigations, M&amp;A) with rapid triage. <span class="win">Built the team's AI monitoring &amp; reporting tools — cut daily client-report time up to 50% and killed manual news tracking.</span></p>
+      </div>
+
+      <div class="job">
+        <div class="top"><div class="org">HYBE <span class="pos">· Global PR</span></div><div class="date">Jan 2023 – Sep 2023</div></div>
+        <p>Global outbound briefings and pitching that secured tier-1 interviews with international decision-makers — <span class="win">CNN · Bloomberg · Billboard · Mashable</span>.</p>
+      </div>
+
+      <div class="job">
+        <div class="top"><div class="org">Office of the President (Cheong Wa Dae) <span class="pos">· Foreign Press Secretariat</span></div><div class="date">May 2021 – Jul 2022</div></div>
+        <p>Managed the foreign press corps with outlet-by-outlet targeting; produced English press materials, speeches, and the Presidential Press Kit; set up <span class="win">ABC · TIME</span> interviews — high-trust engagement in English.</p>
+      </div>
+
+      <div class="job">
+        <div class="top"><div class="org">Hankyoreh Economy &amp; Society Research Institute <span class="pos">· Researcher</span></div><div class="date">Jun 2019 – May 2021</div></div>
+        <p>Planned a global business forum (speaker outreach → on-site delivery) and ran survey-based policy research (10,000-person Seoul youth study) end to end.</p>
+      </div>
+    </section>
+  </main>
+
+</div>
+</body>
+</html>
