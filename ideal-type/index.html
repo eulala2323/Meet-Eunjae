@@ -288,6 +288,7 @@ footer a{color:var(--accent-ink)}
       <span class="tag">공개 통계 기반</span>
       <span class="tag">계산 과정 전부 공개</span>
       <span class="tag">서버 전송 없음</span>
+      <span class="tag" id="vintageTag">인구 기준 2024년 말</span>
     </div>
   </div>
 </header>
@@ -480,7 +481,7 @@ footer a{color:var(--accent-ink)}
       크기 감각 정도로만 읽어 주세요.
     </p>
     <div class="src-grid">
-      <div class="src"><b>지역별 인구 · 연령 구조</b><span>행정안전부 주민등록 인구통계 (2024년 말 기준, 시도별 총인구 및 연령대 구성비)</span></div>
+      <div class="src"><b>지역별 인구 · 연령 구조</b><span id="srcPop">행정안전부 주민등록 인구통계 (2024년 말 기준, 시도별 총인구 및 연령대 구성비를 전국 연령구조에 맞춰 보정한 추정표)</span></div>
       <div class="src"><b>키 분포</b><span>산업통상자원부 국가기술표준원 Size Korea 제8차 인체치수조사 (2020–2023). 연령대·성별 평균 신장에 표준편차 남 5.7cm / 여 5.3cm의 정규분포를 적용</span></div>
       <div class="src"><b>혼인 상태</b><span>통계청 인구주택총조사 혼인상태 집계 (성·연령별 미혼율, 이혼·사별 비율)</span></div>
       <div class="src"><b>학력</b><span>통계청 인구총조사 교육정도 및 교육부·OECD 교육지표 고등교육 이수율 (성·연령대별)</span></div>
@@ -683,9 +684,60 @@ function heightIdx(age){
   return clampIdx(Math.floor(age/10) - 1, 6);
 }
 
+/* KOSIS 에서 받아 굳혀 둔 실측 인구. data/population.json 이 있으면 채워지고,
+   없으면 null 로 남아 위의 내장 추정표를 그대로 씁니다. */
+var LIVE = null;
+
+function liveSources(regionKey){
+  if(!LIVE || !LIVE.regions) return null;
+  if(regionKey === 'all'){
+    var keys = [];
+    for(var k in LIVE.regions){ if(LIVE.regions.hasOwnProperty(k)) keys.push(k); }
+    return keys.length ? keys : null;
+  }
+  return LIVE.regions[regionKey] ? [regionKey] : null;
+}
+
+/* 지역 전체 인구(성별·나이 무관) */
+function regionPop(regionKey){
+  var srcs = liveSources(regionKey), total = 0;
+  if(srcs){
+    for(var i = 0; i < srcs.length; i++){
+      var b = LIVE.regions[srcs[i]].bands;
+      for(var j = 0; j < b.M.length; j++) total += b.M[j] + b.F[j];
+    }
+    return total;
+  }
+  return REGIONS[regionKey].p;
+}
+
 /* 지역 인구를 5세 × 성별 칸으로 분해 */
 function buildCells(regionKey, sexMode){
   var reg = REGIONS[regionKey], i;
+
+  /* ── 실측 데이터가 있으면 모형 없이 그대로 사용 ── */
+  var srcs = liveSources(regionKey);
+  if(srcs){
+    var sexesL = sexMode === 'A' ? ['M','F'] : [sexMode];
+    var out = [];
+    for(i = 0; i < BANDS.length; i++){
+      for(var a = 0; a < sexesL.length; a++){
+        var n = 0;
+        for(var b2 = 0; b2 < srcs.length; b2++){
+          n += LIVE.regions[srcs[b2]].bands[sexesL[a]][i] || 0;
+        }
+        out.push({
+          lo: i*5,
+          hi: i === BANDS.length-1 ? 100 : i*5+5,
+          sex: sexesL[a],
+          n: n,
+          mid: i*5 + 2.5
+        });
+      }
+    }
+    return out;
+  }
+
   var totalNat = 0;
   for(i = 0; i < BANDS.length; i++) totalNat += BANDS[i];
 
@@ -854,7 +906,7 @@ function calculate(c){
     running = after;
   }
 
-  return {base: base, rows: rows, final: running, regionPop: REGIONS[c.region].p};
+  return {base: base, rows: rows, final: running, regionPop: regionPop(c.region)};
 }
 
 /* ═══════════ 3. 표시 ═══════════ */
@@ -939,7 +991,7 @@ function render(){
   $('verdict').textContent = verdictFor(r.final);
 
   /* ── 체감 비유 ── */
-  var envPop = REGIONS[c.region].p * c.radius;      /* 반경 안 전체 인구(성별·나이 무관) */
+  var envPop = regionPop(c.region) * c.radius;      /* 반경 안 전체 인구(성별·나이 무관) */
   var pEnv = envPop > 0 ? r.final/envPop : 0;
   var facts = [];
   facts.push('생활 반경 안 전체 인구의 <b>' + fmtPct(pEnv) + '</b>');
@@ -1073,6 +1125,47 @@ $('copyBtn').addEventListener('click', function(){
 })();
 
 render();
+
+/* ── KOSIS 실측 인구 불러오기 ──
+   tools/fetch-kosis.mjs 로 만들어 둔 data/population.json 이 있으면
+   내장 추정표 대신 그 값을 쓰고 다시 그립니다. 없거나 형식이 어긋나면
+   조용히 내장표를 유지합니다(페이지는 그대로 동작). */
+(function(){
+  if(!window.fetch) return;
+  fetch('data/population.json', {cache: 'no-cache'})
+    .then(function(res){ return res.ok ? res.json() : null; })
+    .then(function(d){
+      if(!d || !d.regions || typeof d.regions !== 'object') return;
+      /* 최소 형태 검증: 한 지역이라도 18구간 × 남녀 배열을 갖춰야 함 */
+      var ok = false;
+      for(var k in d.regions){
+        if(!d.regions.hasOwnProperty(k)) continue;
+        var b = d.regions[k].bands;
+        if(b && b.M && b.F && b.M.length === BANDS.length && b.F.length === BANDS.length){
+          ok = true;
+        } else {
+          return;   /* 하나라도 어긋나면 통째로 포기 */
+        }
+      }
+      if(!ok) return;
+
+      LIVE = d;
+      var tag = document.getElementById('vintageTag');
+      if(tag && d.period){
+        var y = String(d.period).slice(0, 4), m = String(d.period).slice(4, 6);
+        tag.textContent = '인구 기준 ' + y + (m ? '년 ' + parseInt(m, 10) + '월' : '년') + ' · KOSIS';
+      }
+      var src = document.getElementById('srcPop');
+      if(src){
+        src.textContent = (d.source || 'KOSIS 주민등록인구현황') +
+          ' — 시도 × 성별 × 5세 단위 실측값' +
+          (d.period ? ' (' + d.period + ' 기준' : '') +
+          (d.fetchedAt ? ', ' + d.fetchedAt + ' 갱신)' : (d.period ? ')' : ''));
+      }
+      render();
+    })
+    .catch(function(){ /* 파일이 없으면 내장표 그대로 */ });
+})();
 })();
 </script>
 </body>
